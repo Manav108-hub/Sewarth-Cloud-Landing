@@ -27,7 +27,7 @@ export default function ContactForm() {
     setLoading(false);
 
     if (result.success) {
-      setStatus({ type: "success", message: "Message sent successfully!" });
+      setStatus({ type: "success", message: "Message sent successfully via email! Opening WhatsApp..." });
       form.reset();
 
       // Open WhatsApp
@@ -67,7 +67,7 @@ export default function ContactForm() {
           <select required name="businessType" defaultValue="" className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm appearance-none" id="business-type">
             <option disabled value="">Select an option</option>
             <option value="retail">Small Retail Business</option>
-            <option value="startup">Startup</option>
+            <option value="startup">Start-ups</option>
             <option value="individual">Individual</option>
             <option value="other">Other</option>
           </select>
@@ -77,9 +77,19 @@ export default function ContactForm() {
         <label className="font-label-md text-label-md text-on-surface" htmlFor="message">Message</label>
         <textarea required name="message" className="w-full bg-surface-container-low border border-outline-variant/50 rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm resize-none" id="message" placeholder="Tell us about your needs..." rows={4}></textarea>
       </div>
-      <button disabled={loading} className="mt-4 bg-secondary-container text-on-secondary-container font-label-md text-label-md text-lg px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-secondary-container/20 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto self-center disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
-        {loading ? "Sending..." : "Send Message"}
-      </button>
+      <div className="flex justify-center sm:justify-start w-full mt-4">
+        <button disabled={loading} className="bg-primary text-on-primary font-label-md text-label-md text-lg px-10 py-4 rounded-xl hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-1 transition-all duration-300 w-full sm:w-auto flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+          <div className="flex -space-x-2">
+            <div className="bg-pure-white rounded-full p-1 shadow-sm flex items-center justify-center z-10 text-primary">
+              <span className="material-symbols-outlined text-[16px]">mail</span>
+            </div>
+            <div className="bg-[#25D366] rounded-full p-1 shadow-sm flex items-center justify-center text-white">
+              <span className="material-symbols-outlined text-[16px]">chat</span>
+            </div>
+          </div>
+          {loading ? "Sending..." : "Send"}
+        </button>
+      </div>
     </form>
   );
 }

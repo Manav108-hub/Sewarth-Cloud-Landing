@@ -15,10 +15,15 @@ export default function Home() {
               className="h-8 w-auto"
               src="/image.png"
             />{" "}
-            <span className="font-headline-md text-headline-md font-bold text-primary hidden sm:block">
-              {" "}
-              Sewarth Cloud{" "}
-            </span>{" "}
+            <div className="hidden sm:flex flex-col">
+              <span className="font-headline-md text-headline-md font-bold text-primary">
+                {" "}
+                Sewarth Cloud Pvt Ltd{" "}
+              </span>
+              <span className="text-[9px] sm:text-[10px] font-medium tracking-wider text-on-surface-variant">
+                SECURE - RELIABLE - SCALABLE - SMART SOLUTIONS
+              </span>
+            </div>
           </div>{" "}
           <div className="hidden md:flex items-center gap-6">
             {" "}
@@ -48,7 +53,7 @@ export default function Home() {
               href="#why-us"
             >
               {" "}
-              Why Us{" "}
+              Why Choose Us{" "}
             </a>{" "}
           </div>{" "}
           <div className="flex items-center">
@@ -108,13 +113,6 @@ export default function Home() {
                     arrow_forward{" "}
                   </span>{" "}
                 </a>{" "}
-                <a
-                  className="border-2 border-primary text-primary font-label-md text-label-md px-6 py-3 rounded-xl hover:bg-primary-fixed/20 transition-all duration-300 inline-flex items-center gap-2"
-                  href="#services"
-                >
-                  {" "}
-                  Explore Services{" "}
-                </a>{" "}
               </div>{" "}
             </div>{" "}
             <div className="relative z-10 hidden md:block">
@@ -148,7 +146,7 @@ export default function Home() {
               technology for every ambition.{" "}
             </p>{" "}
             <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary-container mx-auto my-4 rounded-full"></div>{" "}
-            <h3 className="font-headline-sm text-headline-sm text-primary">
+            <h3 className="font-headline-lg text-headline-lg text-on-surface">
               {" "}
               Our Mission...{" "}
             </h3>{" "}
@@ -295,7 +293,7 @@ export default function Home() {
               {" "}
               <h2 className="font-headline-lg text-headline-lg text-on-surface mb-2">
                 {" "}
-                WHO WE SERVE{" "}
+                Who We Serve...{" "}
               </h2>{" "}
               <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto">
                 {" "}
@@ -338,7 +336,7 @@ export default function Home() {
                 </div>{" "}
                 <h3 className="font-headline-sm text-headline-sm text-on-surface">
                   {" "}
-                  Startups{" "}
+                  Start-ups{" "}
                 </h3>{" "}
                 <p className="font-body-sm text-body-sm text-on-surface-variant">
                   {" "}
@@ -390,7 +388,7 @@ export default function Home() {
               {" "}
               <h2 className="font-headline-lg text-headline-lg text-on-surface">
                 {" "}
-                Why Choose Us{" "}
+                Why Choose Us...{" "}
               </h2>{" "}
               <p className="font-body-md text-body-md text-on-surface-variant mb-4">
                 {" "}
@@ -537,9 +535,9 @@ export default function Home() {
             {" "}
             <div className="text-center mb-8">
               {" "}
-              <h2 className="font-headline-md text-headline-md text-primary mb-2 uppercase tracking-wide">
+              <h2 className="font-headline-md text-headline-md text-primary mb-2">
                 {" "}
-                GET IN TOUCH WITH US TODAY FOR CUSTOMIZED SOLUTION{" "}
+                For Customized Solution... Get In Touch Today{" "}
               </h2>{" "}
               <p className="font-body-sm text-body-sm text-on-surface-variant">
                 {" "}

@@ -2,11 +2,6 @@
 
 import { Resend } from "resend";
 
-// Initialize Resend with the API key from environment variables
-// If not set, we'll log it (for testing purposes)
-const resendApiKey = process.env.RESEND_API_KEY;
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
-
 export async function submitContactForm(formData: FormData) {
   const name = formData.get("name") as string;
   const email = formData.get("email") as string;
@@ -18,35 +13,97 @@ export async function submitContactForm(formData: FormData) {
     return { success: false, error: "Please fill out all required fields." };
   }
 
-  const emailContent = `
-    New Query from Sewarth Cloud Landing Page:
-    
-    Name: ${name}
-    Email: ${email}
-    Phone: ${phone}
-    Business Type: ${businessType}
-    
-    Message:
-    ${message}
-  `;
+  const content = `New Query from Sewarth Cloud Landing Page:
+  
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Business Type: ${businessType}
+
+Message:
+${message}`;
+
+  let emailSuccess = false;
+  let waSuccess = false;
+  let errorMsg = "";
+
+  // 1. Send Email via Resend
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const resendDomain = process.env.RESEND_DOMAIN || "resend.dev";
+  const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
   try {
     if (resend) {
       await resend.emails.send({
-        from: "Sewarth Cloud <onboarding@resend.dev>", // Or your verified domain
-        to: process.env.CONTACT_EMAIL || "delivered@resend.dev", // Replace with your email
+        from: `Sewarth Cloud <onboarding@${resendDomain}>`,
+        to: process.env.CONTACT_EMAIL || "delivered@resend.dev",
         subject: `New Contact Form Submission from ${name}`,
-        text: emailContent,
+        text: content,
       });
-      return { success: true };
+      emailSuccess = true;
     } else {
-      // Mock for when API key is missing
-      console.log("Resend API key missing. Mocking email send:");
-      console.log(emailContent);
-      return { success: true, mock: true };
+      console.log("Resend API key missing. Mocking email send.");
+      emailSuccess = true;
     }
   } catch (error: any) {
     console.error("Error sending email via Resend:", error);
-    return { success: false, error: error.message || "Failed to send email" };
+    errorMsg += "Email failed. ";
+  }
+
+  // 2. Send WhatsApp Message via Fortius API
+  const waToken = process.env.WHATSAPP_API_TOKEN;
+  const waPhoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+
+  try {
+    if (waToken && waPhoneNumberId) {
+      const waUrl = `https://wafortius.in.net/V23.0/${waPhoneNumberId}/messages`;
+      
+      // Default to sending the message to the admin's WhatsApp number
+      let adminPhone = process.env.ADMIN_WHATSAPP_NUMBER || process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890";
+      // Ensure the phone number has a country code. If it's a 10 digit Indian number, add '91'
+      adminPhone = adminPhone.replace(/\D/g, ""); // Remove non-numeric chars like '+'
+      if (adminPhone.length === 10) {
+        adminPhone = "91" + adminPhone;
+      }
+      
+      console.log("Sending WhatsApp message to:", adminPhone);
+
+      const response = await fetch(waUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${waToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          recipient_type: "individual",
+          to: adminPhone,
+          type: "text",
+          text: {
+            body: content
+          }
+        }),
+      });
+      
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("WhatsApp API Error:", errText);
+        errorMsg += "WhatsApp failed. ";
+      } else {
+        waSuccess = true;
+      }
+    } else {
+       console.log("WhatsApp API token missing. Mocking WhatsApp send.");
+       waSuccess = true;
+    }
+  } catch (error: any) {
+    console.error("Error sending WhatsApp message:", error);
+    errorMsg += "WhatsApp failed. ";
+  }
+
+  if (emailSuccess || waSuccess) {
+    return { success: true };
+  } else {
+    return { success: false, error: errorMsg || "Failed to send message." };
   }
 }

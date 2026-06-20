@@ -27,14 +27,8 @@ export default function ContactForm() {
     setLoading(false);
 
     if (result.success) {
-      setStatus({ type: "success", message: "Message sent successfully via email! Opening WhatsApp..." });
+      setStatus({ type: "success", message: "Message sent successfully!" });
       form.reset();
-
-      // Open WhatsApp
-      const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890"; // Fallback to a placeholder
-      const waMessage = `Hi, I have a query for Sewarth Cloud.\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nBusiness Type: ${businessType}\n\nMessage:\n${message}`;
-      const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waMessage)}`;
-      window.open(waUrl, "_blank");
     } else {
       setStatus({ type: "error", message: result.error || "Failed to send message." });
     }

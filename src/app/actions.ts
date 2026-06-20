@@ -78,9 +78,24 @@ ${message}`;
           messaging_product: "whatsapp",
           recipient_type: "individual",
           to: adminPhone,
-          type: "text",
-          text: {
-            body: content
+          type: "template",
+          template: {
+            name: process.env.WHATSAPP_TEMPLATE_NAME || "new_contact_query",
+            language: {
+              code: "en_US" // Change to "en" or "en_GB" depending on what you selected in Fortius
+            },
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  { type: "text", text: name },
+                  { type: "text", text: email },
+                  { type: "text", text: phone },
+                  { type: "text", text: businessType },
+                  { type: "text", text: message }
+                ]
+              }
+            ]
           }
         }),
       });
